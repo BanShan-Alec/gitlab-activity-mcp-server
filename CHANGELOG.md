@@ -1,108 +1,115 @@
-# 更新日志
+# Changelog
 
-## [0.0.2] - 2025-01-13
+All notable changes to this project will be documented in this file.
 
-### 🚀 新增功能
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-#### 缓存系统优化
+## [1.0.0] - 2025-01-09
 
-- **24小时缓存**: 将缓存有效期从60分钟延长到24小时
-- **Token感知缓存**: 用户缓存键改为使用 `GITLAB_ACCESS_TOKEN`
-- **自动缓存清理**: 检测到 Access Token 变化时自动清空所有缓存
+### 🎉 首次发布
 
-#### MCP 测试工具
+这是 GitLab Activity MCP 的首个正式版本，提供完整的 GitLab 活动报告功能。
 
-- **MCP Inspector**: 引入 `@modelcontextprotocol/inspector` 用于测试
-- **测试脚本**: 添加 `npm run inspector` 和 `npm run test:mcp` 命令
-- **测试文档**: 新增详细的 MCP 测试指南
-
-### 🔧 技术改进
-
-#### 缓存策略升级
-
-```typescript
-// 之前: 60分钟缓存，固定键名
-const cacheKey = 'current';
-cacheDurationMinutes = 60;
-
-// 现在: 24小时缓存，Token敏感
-const cacheKey = accessToken;
-cacheDurationHours = 24;
-```
-
-#### Token变化检测
-
-```typescript
-interface CacheData {
-  users: Record<string, { data: any; timestamp: number }>;
-  projects: Record<string, { data: any; timestamp: number }>;
-  accessToken?: string; // 🆕 记录当前使用的 access token
-}
-```
-
-### 📖 文档更新
-
-- **缓存指南**: 更新缓存时长和策略说明
-- **测试文档**: 新增 `examples/mcp-testing.md`
-- **更新日志**: 新增此文档记录版本变化
-
-### ⚡ 性能提升
-
-- **长期缓存**: 24小时缓存显著减少API调用
-- **智能清理**: Token变化时精准清理，避免过期数据
-- **单用户优化**: 每个Token只缓存一个用户的数据
-
-### 🛠️ 开发体验
-
-- **可视化测试**: MCP Inspector 提供 Web 界面测试
-- **快速验证**: 一键启动测试环境
-- **实时调试**: 详细的执行日志和错误信息
-
-## [0.0.1] - 2025-01-12
-
-### 🎉 初始版本
+### ✨ 新增功能
 
 #### 核心功能
+- **GitLab 活动获取**: 从 GitLab API 获取用户活动记录
+- **智能活动分类**: 基于关键词自动分类提交类型
+  - 🐛 Bug修复 (`bug_fix`)
+  - ✨ 新功能 (`feature`) 
+  - 🔧 改进优化 (`improvement`)
+  - 📚 文档更新 (`documentation`)
+  - 🧪 测试 (`test`)
+  - ⚙️ 配置更改 (`config`)
+  - 📦 其他 (`other`)
+- **Markdown 报告生成**: 生成结构化的活动报告
+- **统计分析**: 提供按类型和项目的统计信息
 
-- **GitLab 活动获取**: 通过 GitLab API 获取用户活动记录
-- **智能分类**: 自动分类提交类型（新功能、Bug修复、改进等）
-- **报告生成**: 生成详细的 Markdown 活动报告
-- **时间筛选**: 支持按日期范围筛选活动
+#### MCP 工具和提示
+- **`gitlab_activity_report`** 工具: 获取并生成活动报告
+- **`monthly_report_summary`** 提示: 生成专业的月度总结
 
-#### AI 分析模板
+#### 支持的配置
+- 灵活的时间范围筛选 (`startDate`, `endDate`)
+- 自定义 GitLab 实例支持
+- 可配置的缓存机制
 
-- **活动分析**: 性能评估、趋势分析、深度洞察、改进建议
-- **月报生成**: 多种风格的专业月度报告
-- **绩效评估**: 自评、同事评估、管理者评估
-- **职业规划**: 基于活动数据的发展建议
+### 🔧 技术实现
 
-#### 技术架构
-
-- **MCP Framework**: 基于 v0.2.2 构建
-- **服务式架构**: GitLabAuthService、CacheService、GitLabService
+#### 架构设计
+- **模块化服务**: `GitLabService`, `CacheService`, `EventAnalyst`
 - **类型安全**: 完整的 TypeScript 类型定义
-- **数据验证**: Zod schema 严格验证
+- **错误处理**: 完善的异常处理和用户友好的错误信息
+- **缓存优化**: 智能缓存减少 API 调用
 
-#### 缓存系统
+#### 开发工具
+- **构建系统**: TypeScript + MCP Build 工具
+- **代码格式化**: Prettier 配置
+- **依赖管理**: pnpm 包管理器
+- **npm 发布**: 自动化构建和依赖处理
 
-- **LowDB**: JSON 本地持久化缓存
-- **智能缓存**: 用户信息和项目信息缓存
-- **自动管理**: 过期检查和清理机制
+### 📦 包发布配置
+
+#### npm 包信息
+- **包名**: `gitlab-activity-mcp`
+- **命令**: `npx gitlab-activity-mcp`
+- **版本**: 1.0.0
+- **许可证**: MIT
+
+#### 环境要求
+- **Node.js**: >=18.19.0
+- **GitLab API**: v4
+- **权限**: read_user 或 api
+
+### 📚 文档
+
+#### 完整文档
+- **README.md**: 中文完整使用指南
+- **examples/usage-example.md**: 详细使用示例
+- **API 文档**: 工具和提示的完整参数说明
+
+#### 使用指南
+- Claude Desktop 配置示例
+- 环境变量配置说明
+- 故障排除指南
+- 多种使用场景示例
+
+### 🎯 使用场景
+
+- **个人开发者**: 快速生成工作总结和进度跟踪
+- **团队管理者**: 监控团队开发活动和项目进度
+- **项目经理**: 生成项目报告和客户汇报材料
+- **绩效评估**: 提供量化的开发活动数据
+
+### 🔒 安全性
+
+- **访问控制**: 仅使用必要的 GitLab API 权限
+- **数据隐私**: 本地缓存，不上传敏感信息
+- **配置验证**: 启动时验证 GitLab 连接和权限
+
+### 🚀 性能优化
+
+- **智能缓存**: 减少重复 API 调用
+- **批量处理**: 高效的数据处理和转换
+- **错误重试**: 自动处理网络异常
+
+## [未来计划]
+
+### v1.1.0 计划功能
+- [ ] 支持更多 GitLab 活动类型 (Issues, Merge Requests)
+- [ ] 支持自定义报告模板
+
+### v1.2.0 计划功能
+- [ ] 集成更多 AI 分析功能
+- [ ] 支持导出到多种格式 (PDF, Excel)
 
 ---
 
-## 版本规划
+## 贡献指南
 
-### 下一版本 (0.0.3)
+欢迎提交 Issue 和 Pull Request！
 
-- [ ] 批量项目分析优化
-- [ ] 更多的 GitLab 事件类型支持
-- [ ] 自定义分析规则配置
-- [ ] 导出多种格式支持
+## 许可证
 
-### 未来版本
-
-- [ ] Web 界面支持
-- [ ] 团队分析功能
-- [ ] 集成其他代码托管平台
-- [ ] 高级数据可视化
+MIT License - 详见 [LICENSE](LICENSE) 文件
