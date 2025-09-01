@@ -70,6 +70,11 @@ export const ACTIVITY_TYPE_KEYWORDS = {
             'chore:', 'ci:'
         ],
         description: '配置更改'
+    },
+    other: {
+        // 其他未分类活动
+        keywords: [],
+        description: '其他'
     }
 };
 

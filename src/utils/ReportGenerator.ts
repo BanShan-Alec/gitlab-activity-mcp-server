@@ -43,7 +43,7 @@ export class MarkdownFormatter {
         const {
             showStatistics = true,
             groupByProject = true,
-            groupByType = false,
+            groupByType = true,
             showMatchReasons = false,
             showDetailedTime = true,
             maxDescriptionLength = 200,
