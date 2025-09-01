@@ -33,19 +33,18 @@ pnpm start
 
 #### 参数
 
-| 参数名 | 类型 | 必需 | 描述 | 示例 |
-|--------|------|------|------|------|
-| `startDate` | string | ❌ | 开始日期 (ISO 8601 格式) | `2025-01-01` |
-| `endDate` | string | ❌ | 结束日期 (ISO 8601 格式) | `2025-01-31` |
-
+| 参数名      | 类型   | 必需 | 描述                     | 示例         |
+| ----------- | ------ | ---- | ------------------------ | ------------ |
+| `startDate` | string | ❌   | 开始日期 (ISO 8601 格式) | `2025-01-01` |
+| `endDate`   | string | ❌   | 结束日期 (ISO 8601 格式) | `2025-01-31` |
 
 #### 环境变量配置
 
-| 变量名 | 必需 | 描述 | 示例 |
-|--------|------|------|------|
-| `GITLAB_BASE_URL` | ✅ | GitLab 实例的 API 基础 URL | `https://gitlab.com/api/v4` |
-| `GITLAB_ACCESS_TOKEN` | ✅ | GitLab 访问令牌 (需要 read_user 或 api 权限) | `glpat-xxxxxxxxxxxxxxxxxxxx` |
-| `GITLAB_CACHE_PATH` | ❌ | 缓存文件路径 | `./cache/gitlab-cache.json` |
+| 变量名                | 必需 | 描述                                         | 示例                         |
+| --------------------- | ---- | -------------------------------------------- | ---------------------------- |
+| `GITLAB_BASE_URL`     | ✅   | GitLab 实例的 API 基础 URL                   | `https://gitlab.com/api/v4`  |
+| `GITLAB_ACCESS_TOKEN` | ✅   | GitLab 访问令牌 (需要 read_user 或 api 权限) | `glpat-xxxxxxxxxxxxxxxxxxxx` |
+| `GITLAB_CACHE_PATH`   | ❌   | 缓存文件路径                                 | `./cache/gitlab-cache.json`  |
 
 ## AI Prompt 模板 (Prompts)
 
@@ -54,12 +53,14 @@ pnpm start
 分析 GitLab 活动数据，提供深度洞察和专业建议。
 
 **参数：**
+
 - `reportData`: GitLab 活动报告的原始数据
 - `analysisType`: 分析类型 (`performance`, `trends`, `insights`, `recommendations`)
 - `timeframe`: 时间范围（例如：月度、季度、年度）
 - `focusAreas`: 重点关注领域
 
 **分析类型：**
+
 - 🎯 **performance** - 个人/团队绩效评估
 - 📈 **trends** - 工作模式和技术趋势分析
 - 💡 **insights** - 深度行为模式洞察
@@ -70,6 +71,7 @@ pnpm start
 将 GitLab 活动数据转换为专业的月度工作总结报告。
 
 **参数：**
+
 - `reportData`: 月度 GitLab 活动报告数据
 - `reportStyle`: 报告风格 (`executive`, `technical`, `casual`, `formal`)
 - `audience`: 目标受众 (`manager`, `team`, `client`, `self`)
@@ -78,6 +80,7 @@ pnpm start
 - `language`: 报告语言 (`zh`, `en`)
 
 **报告风格：**
+
 - 📊 **executive** - 高管总结报告
 - 🔧 **technical** - 技术详细报告
 - 💬 **casual** - 日常汇报
@@ -88,6 +91,7 @@ pnpm start
 基于 GitLab 活动数据生成专业的绩效评估报告。
 
 **参数：**
+
 - `reportData`: GitLab 活动报告数据
 - `reviewPeriod`: 评估周期 (`quarterly`, `semi_annual`, `annual`)
 - `reviewType`: 评估类型 (`self`, `peer`, `manager`)
@@ -100,6 +104,7 @@ pnpm start
 基于 GitLab 活动数据制定个人职业发展规划。
 
 **参数：**
+
 - `reportData`: GitLab 活动报告数据
 - `currentRole`: 当前职位/角色
 - `careerGoals`: 职业发展目标
@@ -131,6 +136,7 @@ pnpm start
 ### 基本使用
 
 **获取活动报告：**
+
 ```json
 {
   "startDate": "2025-01-01",
@@ -139,6 +145,7 @@ pnpm start
 ```
 
 **仅指定开始日期：**
+
 ```json
 {
   "startDate": "2025-01-01"
@@ -146,6 +153,7 @@ pnpm start
 ```
 
 **获取所有活动（不指定日期）：**
+
 ```json
 {}
 ```
@@ -153,6 +161,7 @@ pnpm start
 ### AI 分析使用
 
 **性能分析：**
+
 ```json
 {
   "reportData": "... GitLab 报告数据 ...",
@@ -163,6 +172,7 @@ pnpm start
 ```
 
 **月报生成：**
+
 ```json
 {
   "reportData": "... GitLab 报告数据 ...",

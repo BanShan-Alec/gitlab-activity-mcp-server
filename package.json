@@ -14,7 +14,8 @@
     "build": "tsc && mcp-build",
     "watch": "tsc --watch",
     "start": "dotenv -e .env.local -- node --inspect=9222 dist/index.js",
-    "inspect": "dotenv -e .env.local -- mcp-inspector node --inspect=9222 dist/index.js"
+    "inspect": "dotenv -e .env.local -- mcp-inspector node --inspect=9222 dist/index.js",
+    "format": "prettier --write './**/*.{css,ts,tsx,less,json,md,js,jsx}'"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
@@ -26,6 +27,7 @@
     "@modelcontextprotocol/inspector": "^0.16.5",
     "@types/node": "^20.11.24",
     "dotenv-cli": "^7.4.1",
+    "prettier": "^3.6.2",
     "typescript": "^5.3.3"
   },
   "engines": {

@@ -1,5 +1,5 @@
-import { MCPServer } from "mcp-framework";
-import { gitLabService } from "./services/GitLabService";
+import { MCPServer } from 'mcp-framework';
+import { gitLabService } from './services/GitLabService';
 
 const server = new MCPServer();
 

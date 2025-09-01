@@ -1,26 +1,26 @@
-import { MCPPrompt } from "mcp-framework";
-import { z } from "zod";
+import { MCPPrompt } from 'mcp-framework';
+import { z } from 'zod';
 
 interface MonthlyReportSummarySchema {
-    reportData: string;
+  reportData: string;
 }
 
 class MonthlyReportSummary extends MCPPrompt<MonthlyReportSummarySchema> {
-    name = "monthly_report_summary";
-    description = "将 GitLab 活动数据转换为面向团队同事的月度轻松汇报（默认包含量化指标）";
-    schema = {
-        reportData: {
-            type: z.string(),
-            description: "GitLab 月度活动数据",
-            required: true
-        }
-    };
+  name = 'monthly_report_summary';
+  description = '将 GitLab 活动数据转换为面向团队同事的月度轻松汇报（默认包含量化指标）';
+  schema = {
+    reportData: {
+      type: z.string(),
+      description: 'GitLab 月度活动数据',
+      required: true,
+    },
+  };
 
-    async generateMessages(args: MonthlyReportSummarySchema) {
-        const { reportData } = args;
+  async generateMessages(args: MonthlyReportSummarySchema) {
+    const { reportData } = args;
 
-        // 固定：风格为 casual，受众为 team，默认包含量化指标
-        const basePrompt = `
+    // 固定：风格为 casual，受众为 team，默认包含量化指标
+    const basePrompt = `
 请基于以下 GitLab 活动数据，生成一份轻松的团队月度工作汇报：
 
 ${reportData}
@@ -40,16 +40,16 @@ ${reportData}
 4. **踩过的坑**（遇到的问题和学到的经验）
 5. **下个月计划**（即将要做的事）`;
 
-        return [
-            {
-                role: "user" as const,
-                content: {
-                    type: "text" as const,
-                    text: basePrompt
-                }
-            }
-        ];
-    }
+    return [
+      {
+        role: 'user' as const,
+        content: {
+          type: 'text' as const,
+          text: basePrompt,
+        },
+      },
+    ];
+  }
 }
 
 export default MonthlyReportSummary;

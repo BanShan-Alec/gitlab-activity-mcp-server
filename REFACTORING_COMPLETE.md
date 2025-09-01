@@ -7,24 +7,26 @@
 ### 1. ✅ AuthenticatedTool 重构为服务
 
 #### 变更前
+
 ```typescript
 // src/tools/AuthenticatedTool.ts
 abstract class AuthenticatedTool extends MCPTool {
   // 认证逻辑与工具逻辑混合
 }
 
-// src/tools/GitLabActivityTool.ts  
+// src/tools/GitLabActivityTool.ts
 class GitLabActivityTool extends AuthenticatedTool {
   // 继承认证功能
 }
 ```
 
 #### 变更后
+
 ```typescript
 // src/services/GitLabAuthService.ts
 export class GitLabAuthService {
   // 专注认证服务
-  async fetchGitLab(endpoint: string, options?: RequestInit): Promise<any>
+  async fetchGitLab(endpoint: string, options?: RequestInit): Promise<any>;
 }
 
 // src/tools/GitLabActivityTool.ts
@@ -39,6 +41,7 @@ class GitLabActivityTool extends MCPTool {
 ### 2. ✅ 引入 LowDB 缓存服务
 
 #### 新增依赖
+
 ```json
 {
   "dependencies": {
@@ -48,32 +51,34 @@ class GitLabActivityTool extends MCPTool {
 ```
 
 #### 新增缓存服务
+
 ```typescript
 // src/services/CacheService.ts
 export class CacheService {
   // JSON 本地持久化缓存
-  async getUser(userId: string): Promise<any | null>
-  async setUser(userId: string, data: any): Promise<void>
-  async getProject(projectId: string): Promise<any | null>
-  async setProject(projectId: string, data: any): Promise<void>
+  async getUser(userId: string): Promise<any | null>;
+  async setUser(userId: string, data: any): Promise<void>;
+  async getProject(projectId: string): Promise<any | null>;
+  async setProject(projectId: string, data: any): Promise<void>;
 }
 ```
 
 ### 3. ✅ 集成缓存到 GitLabService
 
 #### 增强的 GitLabService
+
 ```typescript
 export class GitLabService {
   constructor(
     fetchGitLab: (endpoint: string, options?: RequestInit) => Promise<any>,
-    cacheService: CacheService  // 新增缓存服务
-  )
-  
+    cacheService: CacheService // 新增缓存服务
+  );
+
   async getCurrentUser() {
     // 先尝试缓存，再调用 API
     const cachedUser = await this.cacheService.getUser('current');
     if (cachedUser) return cachedUser;
-    
+
     const user = await this.fetchGitLab('/user');
     await this.cacheService.setUser('current', user);
     return user;
@@ -84,12 +89,13 @@ export class GitLabService {
 ### 4. ✅ 配置缓存路径
 
 #### 环境变量支持
+
 ```json
 {
   "env": {
     "GITLAB_BASE_URL": "https://gitlab.com/api/v4",
     "GITLAB_ACCESS_TOKEN": "glpat-xxxxxxxxxxxxxxxxxxxx",
-    "GITLAB_CACHE_PATH": "./cache/gitlab-cache.json"  // 🆕 可配置缓存路径
+    "GITLAB_CACHE_PATH": "./cache/gitlab-cache.json" // 🆕 可配置缓存路径
   }
 }
 ```
@@ -97,6 +103,7 @@ export class GitLabService {
 ## 📁 文件结构变更
 
 ### 新增文件
+
 - ✅ `src/services/GitLabAuthService.ts` - 认证服务
 - ✅ `src/services/CacheService.ts` - 缓存服务
 - ✅ `examples/caching-guide.md` - 缓存使用指南
@@ -104,22 +111,26 @@ export class GitLabService {
 - ✅ `cache/` - 缓存目录
 
 ### 修改文件
+
 - ✅ `src/tools/GitLabActivityTool.ts` - 改为使用服务
 - ✅ `src/services/GitLabService.ts` - 集成缓存功能
 - ✅ `package.json` - 添加 lowdb 依赖
 - ✅ `README.md` - 更新配置说明
 
 ### 删除文件
+
 - ✅ `src/tools/AuthenticatedTool.ts` - 已重构为服务
 
 ## 🚀 架构优势
 
 ### 重构前问题
+
 1. **高耦合**: 认证逻辑与工具逻辑混合
 2. **难测试**: 继承结构不利于单元测试
 3. **无缓存**: 重复的 API 调用影响性能
 
 ### 重构后优势
+
 1. **低耦合**: 服务独立，职责明确
 2. **易测试**: 依赖注入，便于 Mock
 3. **高性能**: 智能缓存减少 API 调用
@@ -129,17 +140,20 @@ export class GitLabService {
 ## 📊 缓存系统特性
 
 ### 缓存策略
+
 - **用户信息**: 60分钟缓存，键为 `current`
 - **项目信息**: 60分钟缓存，键为项目ID
 - **用户事件**: 不缓存（实时数据）
 
 ### 缓存管理
+
 - **自动过期**: 超时自动失效
 - **容错处理**: 缓存失败时降级到 API
 - **持久化**: JSON 文件本地存储
 - **统计功能**: 缓存命中率统计
 
 ### 性能提升
+
 - **减少 API 调用**: 相同数据复用缓存
 - **响应时间**: 缓存命中时快 90%+
 - **API 限制**: 降低触发速率限制风险
@@ -147,6 +161,7 @@ export class GitLabService {
 ## 🛠️ 配置示例
 
 ### 基础配置
+
 ```json
 {
   "mcpServers": {
@@ -163,6 +178,7 @@ export class GitLabService {
 ```
 
 ### 自定义缓存路径
+
 ```json
 {
   "env": {
@@ -176,6 +192,7 @@ export class GitLabService {
 ## 📖 文档更新
 
 ### 新增文档
+
 1. **缓存指南**: `examples/caching-guide.md`
    - 缓存配置和使用说明
    - 性能优化建议
@@ -187,6 +204,7 @@ export class GitLabService {
    - 扩展性设计
 
 ### 更新文档
+
 1. **README.md**: 添加缓存配置说明
 2. **技术架构**: 更新为服务式架构
 
@@ -200,12 +218,14 @@ export class GitLabService {
 ## 🧪 测试建议
 
 ### 功能测试
+
 1. 验证缓存命中逻辑
 2. 测试缓存过期机制
 3. 验证配置路径生效
 4. 测试错误降级处理
 
 ### 性能测试
+
 1. 比较缓存前后的响应时间
 2. 监控 API 调用次数减少情况
 3. 验证内存使用优化
