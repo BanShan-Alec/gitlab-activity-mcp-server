@@ -12,11 +12,14 @@
   ],
   "author": "Your Name",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/gitlab-activity-mcp.git"
+    "url": "https://github.com/BanShan-Alec/gitlab-activity-mcp-server.git"
   },
-  "homepage": "https://github.com/yourusername/gitlab-activity-mcp#readme",
+  "homepage": "https://github.com/BanShan-Alec/gitlab-activity-mcp-server#readme",
   "type": "module",
   "bin": {
     "gitlab-activity-mcp": "./dist/index.js"
@@ -30,7 +33,9 @@
     "watch": "tsc --watch",
     "start": "dotenv -e .env.local -- node --inspect=9222 dist/index.js",
     "inspect": "dotenv -e .env.local -- mcp-inspector node --inspect=9222 dist/index.js",
-    "format": "prettier --write './**/*.{css,ts,tsx,less,json,md,js,jsx}'"
+    "format": "prettier --write './**/*.{css,ts,tsx,less,json,md,js,jsx}'",
+    "prepublish": "npm run build",
+    "pub": "npm publish --access=public"
   },
   "dependencies": {
     "lowdb": "^7.0.1",

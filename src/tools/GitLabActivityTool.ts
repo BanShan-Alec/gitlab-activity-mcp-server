@@ -14,13 +14,17 @@ class GitLabActivityTool extends MCPTool<GitLabActivitySchema> {
   description = '获取当前用户的 GitLab 活动记录并生成 Markdown 报告';
   schema = {
     startDate: {
-      type: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式必须为 YYYY-MM-DD (例如: 2025-01-01)'),
-      description: '开始日期 (ISO 8601 格式，例如: 2025-01-01)',
+      type: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/, `日期格式必须为 YYYY-MM-DD (例如: ${new Date().getFullYear()}-01-01)`),
+      description: `开始日期 (ISO 8601 格式，例如: ${new Date().getFullYear()}-01-01)`,
       required: true,
     },
     endDate: {
-      type: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式必须为 YYYY-MM-DD (例如: 2025-01-31)'),
-      description: '结束日期 (ISO 8601 格式，例如: 2025-01-31)',
+      type: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/, `日期格式必须为 YYYY-MM-DD (例如: ${new Date().getFullYear()}-01-31)`),
+      description: `结束日期 (ISO 8601 格式，例如: ${new Date().getFullYear()}-01-31)`,
       required: false,
     },
   };
