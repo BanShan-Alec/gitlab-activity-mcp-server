@@ -1,5 +1,5 @@
+#!/usr/bin/env node
 import { MCPServer } from 'mcp-framework';
-import { gitLabService } from './services/GitLabService';
 
 const server = new MCPServer();
 

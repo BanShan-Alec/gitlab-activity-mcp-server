@@ -1,7 +1,22 @@
 {
-  "name": "gitlab-activity-mcp-server",
+  "name": "gitlab-activity-mcp",
   "version": "0.0.1",
-  "description": "gitlab-activity-mcp-server MCP server",
+  "description": "GitLab Activity MCP Server - Generate professional activity reports and analysis",
+  "keywords": [
+    "gitlab",
+    "mcp",
+    "activity",
+    "report",
+    "git",
+    "analysis"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/gitlab-activity-mcp.git"
+  },
+  "homepage": "https://github.com/yourusername/gitlab-activity-mcp#readme",
   "type": "module",
   "bin": {
     "gitlab-activity-mcp": "./dist/index.js"
@@ -11,14 +26,13 @@
   ],
   "scripts": {
     "prebuild": "rm -rf dist",
-    "build": "tsc && mcp-build",
+    "build": "tsc",
     "watch": "tsc --watch",
     "start": "dotenv -e .env.local -- node --inspect=9222 dist/index.js",
     "inspect": "dotenv -e .env.local -- mcp-inspector node --inspect=9222 dist/index.js",
     "format": "prettier --write './**/*.{css,ts,tsx,less,json,md,js,jsx}'"
   },
   "dependencies": {
-    "date-fns": "^4.1.0",
     "lowdb": "^7.0.1",
     "mcp-framework": "^0.2.15",
     "zod": "^3.22.4"

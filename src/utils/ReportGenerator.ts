@@ -3,9 +3,8 @@
  * 生成包含链接和时间的GitLab活动报告
  */
 
-import { format } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
 import { GitLabActivity, FilterResult } from '../types/gitlab.js';
+import { formatDate } from './Date.js';
 
 export interface FormatOptions {
   // 是否显示统计信息
@@ -101,7 +100,7 @@ export class MarkdownFormatter {
   private formatHeader(title: string, timeRange: DateRange, customDescription?: string): string {
     const timeDesc = customDescription || this.formatTimeRange(timeRange);
 
-    return `# ${title}\n\n**时间范围**: ${timeDesc}\n**生成时间**: ${format(new Date(), 'yyyy年MM月dd日 HH:mm:ss', { locale: zhCN })}`;
+    return `# ${title}\n\n**时间范围**: ${timeDesc}\n**生成时间**: ${formatDate(new Date(), 'yyyy年MM月dd日 HH:mm:ss')}`;
   }
 
   /**
@@ -234,12 +233,12 @@ export class MarkdownFormatter {
     info.push(`**作者**: ${activity.author}`);
 
     if (showDetailedTime) {
-      info.push(`**创建时间**: ${format(activity.createdAt, 'yyyy年MM月dd日 HH:mm:ss', { locale: zhCN })}`);
+      info.push(`**创建时间**: ${formatDate(activity.createdAt, 'yyyy年MM月dd日 HH:mm:ss')}`);
       if (activity.updatedAt && activity.updatedAt.getTime() !== activity.createdAt.getTime()) {
-        info.push(`**更新时间**: ${format(activity.updatedAt, 'yyyy年MM月dd日 HH:mm:ss', { locale: zhCN })}`);
+        info.push(`**更新时间**: ${formatDate(activity.updatedAt, 'yyyy年MM月dd日 HH:mm:ss')}`);
       }
     } else {
-      info.push(`**时间**: ${format(activity.createdAt, 'MM月dd日 HH:mm', { locale: zhCN })}`);
+      info.push(`**时间**: ${formatDate(activity.createdAt, 'MM月dd日 HH:mm')}`);
     }
 
     if (activity.state) {
@@ -289,9 +288,9 @@ export class MarkdownFormatter {
     const { start, end } = timeRange;
 
     if (this.isSameDay(start, end)) {
-      return format(start, 'yyyy年MM月dd日 (E)', { locale: zhCN });
+      return formatDate(start, 'yyyy年MM月dd日 (E)');
     } else {
-      return `${format(start, 'yyyy年MM月dd日', { locale: zhCN })} 至 ${format(end, 'yyyy年MM月dd日', { locale: zhCN })}`;
+      return `${formatDate(start, 'yyyy年MM月dd日')} 至 ${formatDate(end, 'yyyy年MM月dd日')}`;
     }
   }
 
@@ -359,7 +358,7 @@ export class MarkdownFormatter {
    * 检查是否为同一天
    */
   private isSameDay(date1: Date, date2: Date): boolean {
-    return format(date1, 'yyyy-MM-dd') === format(date2, 'yyyy-MM-dd');
+    return formatDate(date1, 'yyyy-MM-dd') === formatDate(date2, 'yyyy-MM-dd');
   }
 
   /**
