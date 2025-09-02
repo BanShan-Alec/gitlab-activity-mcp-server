@@ -10,10 +10,19 @@ export const transformCommitEventToActivity = async (commitEvents: GitLabEvent[]
     try {
       const project = await gitLabService.getProject(event.project_id);
       const { commit_title, ref } = event.push_data || {};
+
+      const title = commit_title || `Push to ${project.name}`;
+
+      // 过滤掉无用的合并提交
+      if (title.startsWith('Merge branch')) {
+        logger.info(`[EventAnalyst] 过滤掉合并提交: ${title}`);
+        continue;
+      }
+
       activities.push({
         type: 'commit',
         id: event.id.toString(),
-        title: commit_title || `Push to ${project.name}`,
+        title,
         description: `${event.action_name} ${project.name} ${ref}`,
         createdAt: new Date(event.created_at),
         projectName: project.name,
@@ -68,7 +77,7 @@ export const analyzeActivities = async (activities: GitLabActivity[]): Promise<F
     config: 0,
     other: 0,
   };
-  const projectStats: Record<number, number> = {};
+  const projectStats: Record<string, number> = {};
 
   try {
     for (const activity of activities) {
@@ -87,14 +96,14 @@ export const analyzeActivities = async (activities: GitLabActivity[]): Promise<F
 
         // 统计信息
         typeStats[type]++;
-        projectStats[activity.projectId] = (projectStats[activity.projectId] || 0) + 1;
+        projectStats[activity.projectName] = (projectStats[activity.projectName] || 0) + 1;
       } else {
         // 未分类的活动，归为other类型
         const defaultActivity = { ...activity, activityType: 'other' as ActivityType };
         classifiedActivities.push(defaultActivity);
         matchReasons.set(activity.id, ['未匹配到特定关键词，归类为其他']);
         typeStats.other++;
-        projectStats[activity.projectId] = (projectStats[activity.projectId] || 0) + 1;
+        projectStats[activity.projectName] = (projectStats[activity.projectName] || 0) + 1;
       }
     }
 

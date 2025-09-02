@@ -83,6 +83,6 @@ export interface FilterResult {
   statistics: {
     total: number;
     byType: Record<ActivityType, number>; // 按活动类型统计
-    byProject: Record<number, number>; // 按项目统计
+    byProject: Record<string, number>; // 按项目名称统计
   };
 }
