@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.0.3
+
+
+### 🚀 Enhancements
+
+- Enhance activity classification and reporting ([a2b7d76](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/a2b7d76))
+- 修复git commit 会丢失的问题 ([26ac31b](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/26ac31b))
+
+### 🩹 Fixes
+
+- Update project statistics to use project names instead of IDs ([2824b4d](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/2824b4d))
+
+### 💅 Refactors
+
+- Improve Markdown report formatting ([4073b5b](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/4073b5b))
+
+### 📖 Documentation
+
+- 更新README ([36c13a1](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/36c13a1))
+- 更新CHANGELOG和使用示例文档 ([1a2d816](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/1a2d816))
+- 引入docs 工作流，补充当前项目文档到docs ([c761056](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/c761056))
+
+### 🏡 Chore
+
+- Prettier 格式化全局 ([b3012fa](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/b3012fa))
+- Update package metadata and remove date-fns dependency ([9741393](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/9741393))
+- Remove gitlab-cache.json file ([5be93ad](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/5be93ad))
+- Update package configuration and improve date validation ([09d0c47](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/09d0c47))
+- Bump version to 0.0.2 in package.json ([32d0036](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/32d0036))
+- 升级mcp-framework 版本 ([98219d3](https://github.com/BanShan-Alec/gitlab-activity-mcp-server/commit/98219d3))
+
+### ❤️ Contributors
+
+- Wengzehua <wengzehua@cvte.com>
+
 ## [1.0.0] - 2025-01-09
 
 ### 🎉 首次发布

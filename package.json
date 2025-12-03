@@ -1,6 +1,6 @@
 {
   "name": "gitlab-activity-mcp",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "GitLab Activity MCP Server - Generate professional activity reports and analysis",
   "keywords": [
     "gitlab",
