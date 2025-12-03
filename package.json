@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "lowdb": "^7.0.1",
-    "mcp-framework": "^0.2.15",
+    "mcp-framework": "^0.2.16",
     "zod": "^3.22.4"
   },
   "devDependencies": {
