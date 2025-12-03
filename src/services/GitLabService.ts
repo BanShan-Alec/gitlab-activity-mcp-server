@@ -1,4 +1,4 @@
-import { GitLabEvent, GitlabUser } from '../types/gitlab.js';
+import { GitLabCommit, GitLabEvent, GitLabProject, GitlabUser } from '../types/gitlab.js';
 import { logger } from 'mcp-framework';
 import { cacheService } from './CacheService.js';
 
@@ -120,6 +120,13 @@ export class GitLabService {
     }
   }
 
+  /**
+   * 获取用户事件
+   * @param userId 用户ID
+   * @param after 开始日期
+   * @param before 结束日期
+   * @returns 事件列表
+   */
   async getUserEvents(userId: string | number, after?: string, before?: string): Promise<GitLabEvent[]> {
     const params = new URLSearchParams({
       action: 'pushed',
@@ -133,27 +140,81 @@ export class GitLabService {
     return this.fetchGitLab(endpoint);
   }
 
-  async getCurrentUser() {
+  /**
+   * 获取当前用户信息
+   * @returns 当前用户信息
+   */
+  async getCurrentUser(): Promise<GitlabUser> {
     if (this.user) return this.user;
-    const user = await this.fetchGitLab('/user');
+    const user = (await this.fetchGitLab('/user')) as GitlabUser;
 
     return user;
   }
 
-  async getProject(projectId: number) {
+  /**
+   * 获取项目信息
+   * @param projectId 项目ID
+   * @returns 项目信息
+   */
+  async getProject(projectId: number): Promise<GitLabProject> {
     const cacheKey = projectId.toString();
 
     // 尝试从缓存获取
     const cachedProject = await cacheService.getProject(cacheKey);
     if (cachedProject) {
-      return cachedProject;
+      return cachedProject as GitLabProject;
     }
 
     // 从 API 获取并缓存
-    const project = await this.fetchGitLab(`/projects/${projectId}`);
+    const project = (await this.fetchGitLab(`/projects/${projectId}`)) as GitLabProject;
     await cacheService.setProject(cacheKey, project);
 
     return project;
+  }
+
+  /**
+   * 获取项目的 commit 列表
+   * @param projectId 项目ID
+   * @param options 查询选项
+   * @returns Commit 列表
+   */
+  async getProjectCommits(
+    projectId: number,
+    options: {
+      author?: string; // 作者名称
+      since?: string; // 开始日期 ISO 8601 格式
+      until?: string; // 结束日期 ISO 8601 格式
+      refName?: string; // 分支名称，默认为 default branch
+      perPage?: number; // 每页数量，默认 100
+      all?: boolean; // 是否获取所有分支，默认 false
+    } = {}
+  ): Promise<GitLabCommit[]> {
+    const { author, since, until, refName, perPage = 100, all = false } = options;
+
+    const params = new URLSearchParams({
+      per_page: perPage.toString(),
+    });
+
+    if (author) params.append('author', author);
+    if (since) params.append('since', since);
+    if (until) params.append('until', until);
+    if (refName) params.append('ref_name', refName);
+    if (all) params.append('all', 'true');
+
+    const endpoint = `/projects/${projectId}/repository/commits?${params.toString()}`;
+    logger.info(`[GitLabService] 获取项目 ${projectId} 的 commits`);
+
+    try {
+      const commits = await this.fetchGitLab(endpoint);
+      logger.info(`[GitLabService] 成功获取项目 ${projectId} 的 ${commits.length} 个 commits`);
+      return commits;
+    } catch (error: unknown) {
+      logger.error(
+        `[GitLabService] 获取项目 ${projectId} 的 commits 失败: ${error instanceof Error ? error.message : String(error)}`
+      );
+      // 如果获取失败（比如项目没有仓库），返回空数组而不是抛出错误
+      return [];
+    }
   }
 }
 

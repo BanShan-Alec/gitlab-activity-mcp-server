@@ -2,7 +2,7 @@ import { MCPTool, logger } from 'mcp-framework';
 import { z } from 'zod';
 import { formatActivitiesMarkdown, generateActivitySummary } from '../utils/ReportGenerator.js';
 import { GitLabService } from '../services/GitLabService.js';
-import { analyzeActivities, transformCommitEventToActivity } from '../utils/EventAnalyst.js';
+import { analyzeActivities, getUserCommitsFromProjects } from '../utils/EventAnalyst.js';
 
 interface GitLabActivitySchema {
   startDate: string;
@@ -40,27 +40,28 @@ class GitLabActivityTool extends MCPTool<GitLabActivitySchema> {
       // 获取当前用户信息
       const currentUser = await gitlabService.getCurrentUser();
       const targetUserId = currentUser.id;
-      logger.info(`[gitlabService] 获取当前用户信息 ${targetUserId}`);
+      const targetUserName = currentUser.username;
+      logger.info(`[GitLabActivityTool] 当前用户: ${targetUserName} (ID: ${targetUserId})`);
 
-      // 获取用户事件
-      const events = await gitlabService.getUserEvents(targetUserId, startDate, endDate);
-      logger.info(`[gitlabService] 获取用户事件 ${events.length} 条`);
+      // 使用新的方式获取完整的 commits
+      // 该方法会先获取活跃项目，然后从每个项目获取完整的 commit 列表
+      const activities = await getUserCommitsFromProjects(targetUserId, targetUserName, startDate, endDate);
+      logger.info(`[GitLabActivityTool] 获取到 ${activities.length} 个活动记录`);
 
-      if (events.length === 0) {
+      if (activities.length === 0) {
         return `📭 在指定时间范围内未找到活动记录。
     
-    **查询参数：**
-    - 用户：${currentUser.username} (${targetUserId})
-    - 开始日期：${startDate || '未指定'}
-    - 结束日期：${endDate || '未指定'}
+**查询参数：**
+- 用户：${currentUser.username} (${targetUserId})
+- 开始日期：${startDate || '未指定'}
+- 结束日期：${endDate || '未指定'}
     
-    请检查：
-    1. 时间范围内是否有 GitLab 活动
-    2. 访问令牌是否有足够权限`;
+请检查：
+1. 时间范围内是否有 GitLab 提交活动
+2. 访问令牌是否有足够权限`;
       }
 
       // 分析活动数据
-      const activities = await transformCommitEventToActivity(events);
       const res = await analyzeActivities(activities);
 
       // 生成详细报告
