@@ -30,6 +30,10 @@ interface DateRange {
   end: Date;
 }
 
+const breakLine = `\n`;
+
+const breakParagraph = `\n\n`;
+
 export class MarkdownFormatter {
   /**
    * 格式化GitLab活动为Markdown报告
@@ -85,13 +89,13 @@ export class MarkdownFormatter {
         );
       }
     } else {
-      sections.push('## 📝 活动详情\n\n*在指定的时间范围内没有找到匹配的活动。*');
+      sections.push(`## 📝 活动详情${breakLine}*在指定的时间范围内没有找到匹配的活动。*`);
     }
 
     // 4. 脚注
     sections.push(this.formatFooter());
 
-    return sections.join('\n\n');
+    return sections.join(breakParagraph);
   }
 
   /**
@@ -100,7 +104,7 @@ export class MarkdownFormatter {
   private formatHeader(title: string, timeRange: DateRange, customDescription?: string): string {
     const timeDesc = customDescription || this.formatTimeRange(timeRange);
 
-    return `# ${title}\n\n**时间范围**: ${timeDesc}\n**生成时间**: ${formatDate(new Date(), 'yyyy年MM月dd日 HH:mm:ss')}`;
+    return `# ${title}${breakParagraph}**时间范围**: ${timeDesc}${breakLine}**生成时间**: ${formatDate(new Date(), 'yyyy年MM月dd日 HH:mm:ss')}`;
   }
 
   /**
@@ -117,7 +121,7 @@ export class MarkdownFormatter {
       const typeItems = Object.entries(statistics.byType)
         .sort(([, a], [, b]) => b - a)
         .map(([type, count]) => `- **${this.getTypeDisplayName(type)}**: ${count} 个`)
-        .join('\n');
+        .join(breakLine);
       sections.push(typeItems);
     }
 
@@ -128,11 +132,11 @@ export class MarkdownFormatter {
         .sort(([, a], [, b]) => b - a)
         .slice(0, 10) // 只显示前10个项目
         .map(([project, count]) => `- **${project}**: ${count} 个`)
-        .join('\n');
+        .join(breakLine);
       sections.push(projectItems);
     }
 
-    return sections.join('\n\n');
+    return sections.join(breakParagraph);
   }
 
   /**
@@ -159,7 +163,7 @@ export class MarkdownFormatter {
       }
     }
 
-    return sections.join('\n\n');
+    return sections.join(breakParagraph);
   }
 
   /**
@@ -186,7 +190,7 @@ export class MarkdownFormatter {
       }
     }
 
-    return sections.join('\n\n');
+    return sections.join(breakParagraph);
   }
 
   /**
@@ -206,7 +210,7 @@ export class MarkdownFormatter {
       sections.push(this.formatSingleActivity(activity, matchReasons.get(activity.id) || [], options));
     }
 
-    return sections.join('\n\n');
+    return sections.join(breakParagraph);
   }
 
   /**
@@ -245,7 +249,7 @@ export class MarkdownFormatter {
       info.push(`**状态**: ${this.formatState(activity.state)}`);
     }
 
-    sections.push(info.join(' | '));
+    sections.push(info.join(breakLine));
 
     // 描述
     if (activity.description) {
@@ -253,6 +257,8 @@ export class MarkdownFormatter {
       if (description.length > maxDescriptionLength) {
         description = description.substring(0, maxDescriptionLength) + '...';
       }
+      // 将描述中的换行符替换为 breakLine
+      description = description.replace(/\n/g, breakLine);
       sections.push(`**描述**: ${description}`);
     }
 
@@ -267,18 +273,18 @@ export class MarkdownFormatter {
 
     // 匹配原因
     if (showMatchReasons && reasons.length > 0) {
-      const reasonText = reasons.map((reason) => `- ${reason}`).join('\n');
-      sections.push(`**匹配原因**:\n${reasonText}`);
+      const reasonText = reasons.map((reason) => `- ${reason}`).join(breakLine);
+      sections.push(`**匹配原因**:${breakLine}${reasonText}`);
     }
 
-    return sections.join('\n\n');
+    return sections.join(breakParagraph);
   }
 
   /**
    * 格式化脚注
    */
   private formatFooter(): string {
-    return `---\n\n*本报告由 GitLab Activity MCP 自动生成*`;
+    return `---${breakParagraph}*本报告由 GitLab Activity MCP 自动生成*`;
   }
 
   /**
